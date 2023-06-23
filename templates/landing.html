@@ -1,15 +1,11 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 <!-- Form for login -->
 <form method="post" class="input">
   <h3>Create, Join, or Reconnect to Chat</h3>
   <div>
     <label>Chat Handle:</label>
-    <input
-      type="text"
-      placeholder="Enter Nickname"
-      name="handle"
-      value="{{name}}"
-    />
+    <input type="text" placeholder="Enter Nickname" name="handle" value="{{name}}" />
   </div>
   <div class="join">
     <input type="text" placeholder="Room ID" name="code" value="{{code}}" />
