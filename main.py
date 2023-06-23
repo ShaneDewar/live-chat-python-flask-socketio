@@ -4,6 +4,7 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 from flask_socketio import SocketIO, send, join_room, leave_room
 import random
+from datetime import datetime
 from string import ascii_uppercase
 
 app = Flask(__name__)
@@ -89,8 +90,9 @@ def message(data):
 
     content = {
         "name": session.get("name"),
-        "message": data["data"]
+        "message": data["msg"],
         # Here is where date sent should be stored for messages for each room
+        "date": datetime.today().strftime('%Y-%m-%d %H:%M:%S')
     }
 
     send(content, to=room)
@@ -104,11 +106,11 @@ def connect(auth):
     room = session.get("room")
     name = session.get("name")
 
-    # kick back to landing if there is no session data
+    # kick user back to landing if there is no session data
     if not room or not name:
         return
 
-    # boot to landing if session data is invalid
+    # boot user to landing if session data is invalid
     if room not in rooms:
         leave_room(room)
         return
@@ -116,13 +118,14 @@ def connect(auth):
     # properly intialize the socket only once the user joins a room
     join_room(room)
     # send JSON announcing new user in room
-    send({"name": name, "message": "has entered the room"}, to=room)
+    send({"name": name, "message": "has entered the room",
+          "date": datetime.today().strftime('%Y-%m-%d %H:%M:%S')}, to=room)
     rooms[room]["users"] += 1
     print(f"{name} joined room {room}")
 
 
 @socketio.on("disconnect")
-def disconnet():
+def disconnect():
     room = session.get("room")
     name = session.get("name")
     leave_room(room)
@@ -133,7 +136,8 @@ def disconnet():
         if rooms[room]["users"] <= 0:
             del rooms[room]
 
-    send({"name": name, "message": " has left the room"}, to=room)
+    send({"name": name, "message": " has left the room",
+          "date": datetime.today().strftime('%Y-%m-%d %H:%M:%S')}, to=room)
     print(f"{name} has left the room {room}")
 
 

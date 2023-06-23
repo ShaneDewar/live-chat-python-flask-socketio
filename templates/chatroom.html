@@ -8,18 +8,21 @@
             id="message" /><button type="button" name="send" id="send-button" onclick="sendMessage()">Send
             Message</button></div>
 
-    <div class="input"><button type="button" name="leave" id="leave-button">Leave Room</button></div>
+    <div class="input"><button type="button" name="leave" id="leave-button" onclick="leaveRoom()">Leave Room</button>
+    </div>
 </div>
 <script type="text/javascript">
     var socketio = io();
 
     // Leave room function
-    document.getElementById("leave-button").onclick = () => {
+    const leaveRoom = () => {
+        // socketio.disconnect()
         location.href = "../";
-    }
+    };
+
     const messages = document.getElementById("messages")
 
-    const createMessage = (name, msg) => {
+    const createMessage = (name, msg, date) => {
         const content = `
         <div class="text">
             <span>
@@ -27,7 +30,7 @@
             </span>
             <span class="muted">
                 <!-- Gives date of message display.. not sent -->
-                ${new Date().toLocaleString()}
+                ${date}
                 </span>
         </div>
         `;
@@ -36,13 +39,13 @@
 
     // listen for data send event from socketio
     socketio.on("message", (data) => {
-        createMessage(data.name, data.message);
+        createMessage(data.name, data.message, data.date);
     });
 
     const sendMessage = () => {
         const message = document.getElementById("message")
         if (message.value == "") return; // dont sent empty messages
-        socketio.emit("message", { data: message.value })
+        socketio.emit("message", { msg: message.value })
         // reset message content after send
         message.value = "";
     };
@@ -50,7 +53,7 @@
 <!-- loop to display messages from message log-->
 {% for msg in messages %}
 <script type="text/javascript">
-    createMessage("{{msg.name}}", "{{msg.message}}");
+    createMessage("{{msg.name}}", "{{msg.message}}", "{{ msg.date }}");
 </script>
 {% endfor %}
 {% endblock %}
