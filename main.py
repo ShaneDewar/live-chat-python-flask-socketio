@@ -12,6 +12,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "random_devkey1"
 socketio = SocketIO(app)
 
+# data stored in ram, could add DB for persistance
 rooms = {}
 
 
@@ -72,11 +73,30 @@ def landing_page():
 @app.route("/chatroom")
 def chatroom():
     room = session.get("room")
-    # Prevent direct room joining, joining rooms without having the appropriate session object.
+    # Prevent direct room joining; must have appropriate session object.
     if room is None or session.get("name") is None or room not in rooms:
         return redirect(url_for("landing.html"))
 
-    return render_template("chatroom.html")
+    return render_template("chatroom.html",
+                           room=room, messages=rooms[room]["messages"])
+
+
+@socketio.on("message")
+def message(data):
+    room = session.get("room")
+    if room not in rooms:
+        return
+
+    content = {
+        "name": session.get("name"),
+        "message": data["data"]
+        # Here is where date sent should be stored for messages for each room
+    }
+
+    send(content, to=room)
+    rooms[room]["messages"].append(content)
+    print(f"{session.get('name')} said: {data['data']}")
+
 
 @socketio.on("connect")
 def connect(auth):
@@ -87,7 +107,7 @@ def connect(auth):
     # kick back to landing if there is no session data
     if not room or not name:
         return
-    
+
     # boot to landing if session data is invalid
     if room not in rooms:
         leave_room(room)
@@ -99,6 +119,23 @@ def connect(auth):
     send({"name": name, "message": "has entered the room"}, to=room)
     rooms[room]["users"] += 1
     print(f"{name} joined room {room}")
+
+
+@socketio.on("disconnect")
+def disconnet():
+    room = session.get("room")
+    name = session.get("name")
+    leave_room(room)
+
+    if room in rooms:
+        rooms[room]["users"] -= 1
+        # cleanup unused rooms
+        if rooms[room]["users"] <= 0:
+            del rooms[room]
+
+    send({"name": name, "message": " has left the room"}, to=room)
+    print(f"{name} has left the room {room}")
+
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)  # Auto refresh server

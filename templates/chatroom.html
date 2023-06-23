@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="chat-box">
-    <h2>Room #: {{room}}</h2>
+    <h2>Room {{room}}</h2>
     <!-- display messages injection div-->
     <div class="messages" id="messages"></div>
     <div class="input"><input type="text" rows="3" placeholder="Enter your message" name="message"
@@ -11,8 +11,40 @@
 <script type="text/javascript">
     var socketio = io();
 
+    const messages = document.getElementById("messages")
+
+    const createMessage = (name, msg) => {
+        const content = `
+        <div class="text">
+            <span>
+                <strong>${name}</strong>: ${msg}
+            </span>
+            <span class="muted">
+                <!-- Gives date of message display.. not sent -->
+                ${new Date().toLocaleString()}
+                </span>
+        </div>
+        `;
+        messages.innerHTML += content;
+    };
+
+    // listen for data send event from socketio
+    socketio.on("message", (data) => {
+        createMessage(data.name, data.message);
+    });
+
     const sendMessage = () => {
-        console.log("send");
+        const message = document.getElementById("message")
+        if (message.value == "") return; // dont sent empty messages
+        socketio.emit("message", { data: message.value })
+        // reset message content after send
+        message.value = "";
     };
 </script>
+<!-- loop to display messages from message log-->
+{% for msg in messages %}
+<script type="text/javascript">
+    createMessage("{{msg.name}}", "{{msg.message}}");
+</script>
+{% endfor %}
 {% endblock %}
