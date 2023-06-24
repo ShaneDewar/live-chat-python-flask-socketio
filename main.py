@@ -76,7 +76,7 @@ def chatroom():
     room = session.get("room")
     # Prevent direct room joining; must have appropriate session object.
     if room is None or session.get("name") is None or room not in rooms:
-        return redirect(url_for("landing.html"))
+        return redirect(url_for("landing_page"))
 
     return render_template("chatroom.html",
                            room=room, messages=rooms[room]["messages"])
@@ -97,7 +97,7 @@ def message(data):
 
     send(content, to=room)
     rooms[room]["messages"].append(content)
-    print(f"{session.get('name')} said: {data['data']}")
+    print(f"{session.get('name')} said: {data['msg']}")
 
 
 @socketio.on("connect")

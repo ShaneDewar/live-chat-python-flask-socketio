@@ -16,8 +16,8 @@
 
     // Leave room function
     const leaveRoom = () => {
-        // socketio.disconnect()
-        location.href = "../";
+        socketio.disconnect()
+        location = "../";
     };
 
     const messages = document.getElementById("messages")
