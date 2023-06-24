@@ -17,7 +17,7 @@ Some additional features for the future would be the addition for the user to na
 
 ## Installation
 
-The project was build and tested in Fedora Linux using FireFox and Falkon as chat clients to check function on both the Gecko and QtWebKit browser engines. I would expect in Chrome since QtWebKit is based on Chromium's web engine.
+The project was build and tested in Fedora Linux using FireFox and Falkon as chat clients to check function on both the Gecko and QtWebKit browser engines. It should work in Chrome as well, since QtWebKit is based on Chromium's web engine.
 
  Python verion 3.11.3 and pip version 23.1.2 were used to develop this project. To install once these prerequisites are installed:
 
