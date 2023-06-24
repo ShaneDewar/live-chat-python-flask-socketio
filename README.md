@@ -46,10 +46,8 @@ The project was build and tested in Fedora Linux using FireFox and Falkon as cha
    ```
 
 - Enter your desired chat name, then click **Create New Chat Room**
-
-   ```md
+- 
    ![Maria enters the chat room](assets/images/2-maria-new-room.png)
-   ```
 
 - When a user joins a room there is a broadcast timestamp to all room users. The room code is at the top.
 In the example it is **TLBSWGOC**
