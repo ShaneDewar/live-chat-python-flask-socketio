@@ -41,47 +41,35 @@ The project was build and tested in Fedora Linux using FireFox and Falkon as cha
 
 - Open the browser and go to the appropriate URL.
 
-   ```md
-   ![Maria creates a chat room](./assets/images/1-first-user.png)
-   ```
+   ![Maria creates a chat room](assets/images/1-first-user.png)
 
 - Enter your desired chat name, then click **Create New Chat Room**
-- 
+ 
    ![Maria enters the chat room](assets/images/2-maria-new-room.png)
 
 - When a user joins a room there is a broadcast timestamp to all room users. The room code is at the top.
 In the example it is **TLBSWGOC**
 
-   ```md
    ![Pete joins Maria's chat room](assets/images/3-pete-joins-marias-room.png)
-   ```
 
 - Other users can join the existing rooms if they have the room code by entering their handle and the code into
 the appropriate spaces and then clicking **Join Room**. All previous messages in the room will be displayed for them (but not previous user join/disconnection messages). 
 
-   ```md
    ![Maria and Pete can chat](assets/images/4-pete-maria-chat.png)
-   ```
 
 - The users can now chat by typing their messages and clicking **Send Message**. Messages will get a time stamp and
 be stored by the server per room. They are not stored in a database so they are lost if the server is shut down. A user's joining and leaving timestamps are not saved.
 
-   ```md
    ![Pete disconnects from Maria's chatroom](assets/images/5-pete-leaves-chat.png)
-   ```
 
 - By clicking **Leave Room** a user can exit the room and go back to the landing screen. The disconnection timestamp
 takes about 40 seconds to broadcast to the room.
 
-   ```md
    ![Pete rejoins Maria's chatroom](assets/images/6-pete-rejoins-chat.png)
-   ```
 
 - Users can rejoin chatrooms in the same way they joined before. All previous messages are displayed when they rejoin.
 
-   ```md
    ![Pete creates another chatroom](assets/images/7-pete-has-two-rooms.png)
-   ```
 
 - Users can have multiple rooms at once. Messages are stored per room. 
 
